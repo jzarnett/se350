@@ -24,9 +24,24 @@ You've been repeatedly told that memory is a linear array of bytes.
 
 You have also been told that there's the stack and the heap, libraries and instructions.
 
+\begin{center}
+	\includegraphics[width=\textwidth]{images/pov.jpg}
+\end{center}
+
+ \end{frame}
+
+
+
+\begin{frame}
+\frametitle{Memory Segmentation}
+
 Both are true; they are views of memory at different levels of abstraction. 
 
 Each of the elements such as the stack, the heap, the standard C library, et cetera, are known as \alert{segments}.
+
+\begin{center}
+	\includegraphics[width=0.4\textwidth]{images/segfault.png}
+\end{center}
 
 
 \end{frame}
@@ -46,11 +61,7 @@ In many cases it does not matter, though C programmers are well advised to know 
 \begin{frame}
 \frametitle{Memory Segments}
 
-A full program has a collection of segments, which may be different lengths. 
-
-Normally the compiler is responsible for constructing the various segments.
-
-Some possible segments:
+A full program has a collection of different-sized segments, made by the compiler.
 
 \begin{enumerate}
 	\item The code (instructions).
@@ -80,6 +91,11 @@ Rather than thinking about memory as just a pure address, we can think of it as 
 Given that, we need an implementation to map these tuples into memory addresses. 
 
 The mapping has a segment table.
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Thinking about Segments}
 
 Each entry in the table contains two values: the base and the limit.
 
@@ -133,21 +149,30 @@ A frame may be empty or may have exactly one page in it.
 
 Imagine, as an analogy, a simple picture frame. 
 
+\begin{center}
+	\includegraphics[width=0.5\textwidth]{images/pictureframe.jpg}
+\end{center}
+
 The frame may be empty or it may contain a picture. 
-
-If the picture frame is empty, all that is necessary is to put a picture in it. 
-
 
 \end{frame}
 
 \begin{frame}
 \frametitle{Paging: Picture Frame}
 
+If the picture frame is empty, all that is necessary is to put a picture in it. 
+
 To put in a different picture, first, take out the picture that is already there. 
 
 Taking out the picture to empty the frame is allowed, too. 
 
 A picture is always aligned to be completely in a frame; not half in and half out. 
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Paging: Picture Frame}
+
 
 Now expand this scheme by having a very long row of picture frames. 
 
@@ -165,7 +190,7 @@ A process starts, is loaded into memory, and has initial memory requirements. \\
 
 The number of pages can \& will change over time as memory is allocated/freed. 
 
-A process may also be swapped out to disk, but to run it will need to be swapped back in. 
+A process may also be swapped out to disk, but to run it needs to be swapped in. 
 
 A process will take up a certain number of pages in memory at any given time.
 
@@ -174,11 +199,11 @@ A process will take up a certain number of pages in memory at any given time.
 \begin{frame}
 \frametitle{Page Benefits}
 
-Pages provide the benefit of separating the logical address from the physical address.
+Pages separate the logical address from the physical address.
 
 Programmers may pretend the address space of the computer is $2^{64}$ bytes.
 
-Rather than however many GB of memory are in the physical machine. 
+Not just how many GB of memory are in the physical machine. 
 
 \end{frame}
 
@@ -250,8 +275,6 @@ That also means that compaction is not an issue.
 Compaction, when it's possible, is painful enough in memory. \\
 \quad It is excruciating to do on disk. 
 
-It is therefore desirable to avoid it entirely. 
-
 We accept some internal fragmentation because a process gets a whole page. 
 
 
@@ -265,6 +288,11 @@ How much internal fragmentation do we have to live with? Not very much.
 If the memory required aligns perfectly with a multiple of the page size, then no memory is wasted. 
 
 If a new memory allocation comes in, then a new page is allocated and added to the logical memory space of the process. 
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Pages: Internal Fragmentation}
 
 The last frame, however, may not be completely full. 
 
@@ -304,6 +332,10 @@ In a typical modern system, pages are 4~KB, but they can be bigger.
 
 Now we finally have a good answer to why the application developer can treat memory as if it is infinitely large and unshared. 
 
+\begin{center}
+	\includegraphics[width=0.5\textwidth]{images/explained.png}
+\end{center}
+
 The program is scattered across physical memory, but appears to the application developer and running application as if it is all contiguous. 
 
 \end{frame}
@@ -316,7 +348,7 @@ We also get protection in this scheme.
 
 A program cannot access any address outside of its memory space. 
 
-There is simply no way to make a memory request outside of the logical memory space. 
+There is no way to make a memory request outside of the logical memory space. 
 
 No matter what address is generated, it could only be inside the page table, and the page table has only entries of that process.
 
@@ -326,6 +358,10 @@ No matter what address is generated, it could only be inside the page table, and
 \frametitle{Pages: The OS View}
 
 The operating system, however, can manage memory of all processes, so it will need another scheme. 
+
+\begin{center}
+	\includegraphics[width=0.4\textwidth]{images/frametable.png}
+\end{center}
 
 The OS will operate on the \alert{frame table}, a listing of all the frames, indicating which page of which process a frame currently holds, if any.
 
@@ -337,9 +373,9 @@ The OS will operate on the \alert{frame table}, a listing of all the frames, ind
 
 Another great advantage of paging is the possibility of sharing of common code. 
 
-Users very often have multiple programs open; and sometimes they are duplicates (e.g., notepad, Microsoft Word, et cetera). 
+Users very often have multiple programs open; sometimes they are duplicates.
 
-In a multiuser system, different users may have some of the same program open (e.g., Skype, Firefox, et cetera). 
+In a multiuser system, different users may have some of the same program open.
 
 We could reduce memory consumption if common parts of this program are shared between all instances of that program.
 
@@ -423,6 +459,11 @@ The page table can be broken up and need not be contiguous in memory.
 
 Suppose we have a two level system. 
 
+\end{frame}
+
+\begin{frame}
+\frametitle{Hierarchical Paging}
+
 If the page number is $p$, the first $k$ bits indicate the \alert{outer page}. 
 
 The outer page contains some information about where the \alert{inner pages} are. 
@@ -456,8 +497,19 @@ But with 64-bit computers, with 4~KB pages, the page table requires $2^{52}$ ent
 
 If an entry is 8 bytes, then the table is over 30 million gigabytes (30~PB).
 
+\end{frame}
+
+\begin{frame}
+\frametitle{Inverted Page Tables}
+
 Does your computer have that much memory?\\
 \quad ... If so, can I borrow it?
+
+\begin{center}
+	\includegraphics[width=\textwidth]{images/datacentre.png}
+\end{center}
+
+
 
 \end{frame}
 
