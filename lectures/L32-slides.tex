@@ -22,12 +22,13 @@
 
 The disk is a very slow device, as far as the CPU is concerned.
 
-We want to avoid going to disk, if it can be helped, whenever possible. 
+\begin{center}
+	\includegraphics[width=0.5\textwidth]{images/sloth.jpg}
+\end{center}
 
 We will examine the hardware behind magnetic disks and see why they are so slow and consider algorithms that could be used to speed up operations.
 
-
-\end{frame}
+ \end{frame}
 
 \begin{frame}
 \frametitle{Magnetic Disks}
@@ -45,6 +46,15 @@ Thus, we would like to devise efficient schedules for reading and writing.
 \frametitle{SSDs}
 
 We will exclude SSDs from consideration here. 
+
+\begin{center}
+	\includegraphics[width=0.5\textwidth]{images/ssd.png}
+\end{center}
+
+ \end{frame}
+
+\begin{frame}
+\frametitle{Magnetic Disks}
 
 SSDs do not contain moving disk heads or spinning platters. 
 
@@ -435,6 +445,12 @@ The OS can provide to the controller a grouping of requests, and then the contro
 If the speed of disk reads and writes were the only thing to be concerned about, the operating system would probably not worry about disk scheduling.
 
 The OS may have certain priorities that should take precedence. 
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Scheduling Algorithm Choice}
+
 
 Loading a page into main memory might need to take priority over an application writing a file to disk. 
 
