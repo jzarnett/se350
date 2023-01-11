@@ -47,6 +47,12 @@ Almost all of the above will be kept up to date constantly as the process execut
 	A process switch from $P_{0}$ to $P_{1}$ and back again~\cite{osc}.
 \end{center}
 
+How does the operating system decide which process gets selected next? That's actually a very complicated question! Scheduling gets its own topic later on in the course where we'll consider many different options. For now (and maybe for a lab!) let's just imagine a simple scenario where PCBs for processes that are ready to run are kept in some data structures and the OS can iterate over those PCBs to choose which one is next. 
+
+In a super-simple approach the PCBs are in an array (or linked list) and we'll just iterate over the list and remember which PCB has the highest priority and isn't currently blocked. If we want to be a little fancier with an implementation then we can have a priority queue system with different queues per priority. That makes it meaningfully faster to dequeue the next ready PCB rather than the $O(n)$ behaviour we'd see with the super simple approach.
+
+Are these approaches where we just ``take the highest-priority task that's ready'' a sane plan? Yes, this is one of the algorithms we'll discuss later in the course so it's not totally ridiculous. Is it optimal? Probably not, though this depends on the objectives of the scheduling algorithm and the nature of the system. 
+
 \subsection*{The Circle of Life}
 
 Unlike energy, processes may be created and destroyed. Upon creation, the OS will create a new PCB for the process and initialize the data in that block. This means setting the variables to their initial values: setting the initial program state, setting the instruction pointer to the first instruction in \texttt{main}, and so on.  The PCB will then be added to the set of PCBs the OS maintains. After the program is terminated and cleaned up, the OS may collect some data (like a summary of accounting information) and then it can remove the PCB from its list of active processes and carry on.
@@ -164,6 +170,7 @@ The solution to both problem scenarios is to split the swapped state in two: Rea
 The Admit transition is modified to show that by default the new process does not start in main memory. Two new transitions, Swap In and Swap Out, are added to show a process being loaded into main memory and written out to disk respectively. Finally, there is a second Unblock transition, where a Blocked/Swapped process gets whatever it was waiting for and moves to the Ready/Swapped state, because it can now run (but is still on disk).
 
 As in the five-state model, there are additional ``Exit'' transitions that may happen but are not shown. If a process is killed, for example, regardless of whether it is in memory or on disk, it will move to the Terminated state.
+
 
 
 \input{bibliography.tex}
