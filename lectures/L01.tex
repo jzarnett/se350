@@ -7,6 +7,9 @@
 \section*{About the Course}
 We'll start by reviewing the highlights of the class syllabus. Please read it carefully (it is available in Learn under Content $\rightarrow$ Overview). It contains a lot of important information about the class including: the lecture topics, the grading scheme, contact information for the course staff, and university policies.
 
+\paragraph{I C what you did there.}
+This course assumes that you have enough knowledge of C that we don't have to spend some time going over it. If that's an area of difficulty for you, the beginning of term is the best time to work on it. Just about everything we need is covered in the first topic of another course I teach, ECE~252, which you can find on Github also.
+
 \section*{Introduction to Operating Systems}
 
 
@@ -20,14 +23,14 @@ time. Functions that were originally part of the operating system have migrated 
 
 \hfill - What Can Be Automated?: The Computer Science and Engineering Research Study, MIT Press, 1980
 
-An operating system (often abbreviated OS) is a piece of software that sits between the hardware of a computer and the applications (programs) that run on that computer. The OS does many different things and often has many (occasionally-conflicting) goals. 
-
-To use an analogy, you may wish to think of the operating system as the ``secretary'' of the computer.  It is a resource manager, and it allocates resources as necessary.  The most significant difference between a secretary and an operating system is that while a secretary can work in parallel with you, operating systems often work when programs are sleeping, and operating systems must put themselves to sleep to allow programs to execute. It is responsible for seeing to it that other programs can operate efficiently, providing an environment for other programs, and collecting and reporting data about what is and has been happening.
-
 \begin{center}
 \includegraphics[width=0.73\textwidth]{images/os-sw-hw.png}\\
 Structural diagram of a modern computer~\cite{osi}.
 \end{center}
+
+An operating system (often abbreviated OS) is a piece of software that sits between the hardware of a computer and the applications (programs) that run on that computer. The OS does many different things and often has many (occasionally-conflicting) goals. It is responsible for seeing to it that other programs can operate efficiently, providing an environment for other programs, and collecting and reporting data about what is and has been happening. It also needs to enforce policies that are defined by system administrators.
+
+
 
 An operating system is also responsible for resource allocation. In the real world, the resources we have to work with, such as CPU time or memory space, are limited. The OS decides how to allocate these resources, keeps track of who currently owns what, and, in the event of conflicting requests, determines who gets the resource.
 
@@ -41,6 +44,12 @@ Operating systems tend to be large and do a lot of things. We expect now that an
 
 Operating systems will evolve over time. There will be new hardware released, new types of hardware, new services added, and bug fixes. Evolution is constrained by a need to maintain compatibility for programs. If the user upgrades his or her desktop OS and a program breaks, even if it's the program author's fault, the user blames the OS vendor. If you look at Microsoft Windows, you can see their strict devotion to not breaking binary compatibility (at least, as much as they reasonably can). Linus Torvalds, yes, the person Linux is named after, gets unreasonably angry with people if they submit a kernel change that might break user-space programs. 
 
+How obsessive are OS designers? Consider this example, admittedly from more than 25 years ago, about Windows 95 (yes, as in 1995)... from~\cite{joelce}:
+
+\begin{quote}
+Windows 95? No problem. Nice new 32 bit API, but it still ran old 16 bit software perfectly. Microsoft obsessed about this, spending a big chunk of change testing every old program they could find with Windows 95. Jon Ross, who wrote the original version of SimCity for Windows 3.x, told me that he accidentally left a bug in SimCity where he read memory that he had just freed. Yep. It worked fine on Windows 3.x, because the memory never went anywhere. Here's the amazing part: On beta versions of Windows 95, SimCity wasn't working in testing. Microsoft tracked down the bug and added specific code to Windows 95 that looks for SimCity. If it finds SimCity running, it runs the memory allocator in a special mode that doesn't free memory right away. That's the kind of obsession with backward compatibility that made people willing to upgrade to Windows 95.
+\end{quote}
+
 As we proceed we will focus on UNIX-like systems with some mention of Microsoft Windows where appropriate. This is for practical reasons: there is only so much time and UNIX-like systems represent a very large percentage of the operating systems out there including Linux, macOS/Mac OS X, Android, and more.
 
 \section*{Security Now}
@@ -53,6 +62,8 @@ An operating system is designed to support multiple users concurrently, each of 
 Typically, OS designers create some policies and also policy tools. Some policies are just a part of the operating system and cannot be changed -- e.g., a file must have the ``execute'' permission to run. Others are configurable by system administrators -- e.g., may non-administrator users install new programs on the system? Security policies do have some tradeoff with usability, in that it can be frustrating for users who are denied some operation and must instead ask administrators to do it for them. But you also can't be too lax about this, because you most certainly do NOT want to find your company's name on TV having to report a data breach in which user personal data was stolen.
 
 OS designers must see to it that the security policies (whether configured or not) are enforced consistently. This helps to ensure that sensitive data is protected, not corrupted, and only accessed by those who should have access. Operating systems that do not provide proper protection and security will inevitably be exploited by malicious users and it will cease to be used. 
+
+Whatever the specifics about policies, there are three desirable properties that go by the acronym ``CIA'' -- Confidentiality, Integrity, Availability. Confidentiality is that information should only be access by those who are authorized to see it. Integrity is that information should be consistent and correct. Availability is that information or services should be available when they are needed.
 
 \paragraph{Protection vs. Security} It's important to draw a quick distinction between \textit{protection} and \textit{security} as in~\cite{osc}. Protection is about ``internal threats'' -- things like making sure that user \texttt{morgan} cannot access the private files of user \texttt{taylor}. Security is more about ``external threats`` -- things like making sure that evil hackers don't gain access to the system. Maybe we take those in order.
 
@@ -99,14 +110,18 @@ Most likely the weakest link in any system is the human! A perfectly secure syst
 The categories discussed above are just types of problem that attackers can cause. Some of them used examples where I gave a specific type of attack, but here's a few ideas, not exhaustive (obviously) that come to mind:
 
 \begin{itemize}
-	\item \textbf{Excessive Requests.} -- overload the system with demands, whether for CPU, memory, responses, etc.
-	\item \textbf{Malformed Requests.} -- send intentionally malformed requests that can cause the system to behave in an unexpected way, crash, or return information it should not be sending.
-	\item \textbf{Back Door.} -- sneaking some code into a program that allows (normally unauthorized) access to a system
-	\item \textbf{Intercepting Messages.} -- observing the communication between systems and intercepting messages to change them or gain information. This is also called a Man-in-the-Middle Attack.
-	\item \textbf{Trojan Horse.} -- tricking someone into installing something that contains a hidden payload that can do one of the things above...
+	\item \textbf{Excessive Requests} -- overload the system with demands, whether for CPU, memory, responses, etc.
+	\item \textbf{Malformed Requests} -- send intentionally malformed requests that can cause the system to behave in an unexpected way, crash, or return information it should not be sending.
+	\item \textbf{Back Door} -- sneaking some code into a program that allows (normally unauthorized) access to a system
+	\item \textbf{Intercepting Messages} -- observing the communication between systems and intercepting messages to change them or gain information. This is also called a Man-in-the-Middle Attack.
+	\item \textbf{Trojan Horse} -- tricking someone into installing something that contains a hidden payload that can do one of the things above...
 \end{itemize}
 
-This is not a course in security, so we can't spend too much time talking about it, even if it can be fascinating. The goal is that we should just be thinking about security (and protection) when considering a design decision. And that consideration should take place early on in the process and not be simply an afterthought!
+Security is, and always has been, a sort of arms race. When an exploit or other vulnerability is discovered, operating system developers need to find a way to guard against it and implement a patch for it (and roll it out). Sometimes the security problem is just the result of a bug, in which case patching it just ensures the system has its intended behaviour. If it's a design problem, then changing the design might actually be painful because it will cause existing software to break. It gets worse, I suppose, because if a bug has been around for long enough, programs may actually rely on the behaviour of that bug. So patching it breaks them too!
+
+Now we have a dilemma! What do we do? Break existing software in the name of security or preserve the user-land programs' behaviour at the cost of security? There are no one-size-fits all answers to this question. That would be too easy.
+
+This is not a course in security, so we can't spend too much time talking about it and will cut it off here, even if it can be fascinating. The goal is that we should just be thinking about security (and protection) when considering a design decision. And that consideration should take place early on in the process and not be simply an afterthought!
 
 \input{bibliography.tex}
 
