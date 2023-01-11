@@ -6,7 +6,7 @@
 
 \section*{Scheduling Algorithms}
 
-Earlier we saw one example of a simple scheduling algorithm: always choose the highest priority (non-blocked) task, and execute it. There are many other choices we could make. We will examine the following options:
+In the last topic, we saw one example of a simple scheduling algorithm: always choose the highest priority (non-blocked) task, and execute it. It's good to be King, I guess, but that solution has some drawbacks. We will examine the following options:
 \begin{enumerate}
 	\item Highest Priority, Period
 	\item First-Come, First-Served
@@ -20,7 +20,7 @@ Earlier we saw one example of a simple scheduling algorithm: always choose the h
 	\item Lottery
 \end{enumerate}
 
-The OS may maintain data about each process to be used in making decisions about scheduling~\cite{osi}:
+The OS may will maintain some data about each process and this may be used in making decisions about scheduling, depending on the algorithm~\cite{osi}:
 
 \begin{enumerate}
 	\item The time spent waiting to run.
@@ -28,20 +28,22 @@ The OS may maintain data about each process to be used in making decisions about
 	\item The total time of execution.
 \end{enumerate}
 
-The first two criteria in the list can easily be measured, but the third one must be estimated or supplied by the user. Old batch systems did sometimes ask users to provide an estimate of how long they thought a task was likely to take. If the user underestimated, then execution would be halted at the time they said, even if his or her operation was unfinished. But the higher the estimate, the lower the priority the task received; if too high the user task might never be scheduled to run at all. Operating systems do not ask the users in desktop systems to estimate how long a process will run, but supercomputers and other batch jobs may still consider this as a criterion.
+The first two criteria in the list can easily be measured, but the third one must be estimated or supplied by the user. Old batch systems did sometimes ask users to provide an estimate of how long they thought a task was likely to take. If the user underestimated, then execution would be halted at the time they said, even if the operation was unfinished. But the higher the estimate, the lower the priority the task received; if too high the user task might never be scheduled to run at all. Operating systems do not ask the users in desktop systems to estimate how long a process will run, but supercomputers and other batch processing systems may still consider this as a criterion.
 
 \subsection*{Highest Priority, Period}
 
-Implementing this is not difficult; we could have some priority queues (one for each priority level). If a task is not blocked, put it in its appropriate priority queue. If the process's priority is changed (manually or otherwise), move it to its new home. We might have a priority heap, or just one big linked list or array that we keep sorted by priority. Many options.
+Implementing this is not difficult; we could have some priority queues (one for each priority level). If a task is not blocked, put it in its appropriate priority queue. If the process's priority is changed (manually or otherwise), move it to its new home. We might also have a priority heap, or just one big linked list or array that we keep sorted by priority. However it's stored isn't actually the critical part here.
 
-The flaw in this has already been identified: it is vulnerable to starvation. A process of relatively low priority may never get the chance to run, because there is always something better to do right now. Humans presumably encounter situations like this all the time. Software projects may have bug reports open for years on end because they are never important enough to be addressed. In my personal life, there are books I'd like to read (the example ``Der Deutsch-Franz\"osische Krieg 1870/71'' springs to mind), but I never get to them because something else always comes up... work to do, another book to read, a social event...
+The flaw in this has already been identified: it is vulnerable to starvation. A process of relatively low priority may never get the chance to run, because there is always something better to do right now. Humans presumably encounter situations like this all the time. Software projects may have bug reports open for years on end because they are never important enough to be addressed. In my personal life, there are books I'd like to read (the example ``Der Deutsch-Franz\"osische Krieg 1870/71'' springs to mind)\footnote{I first wrote the paragraph about this book in 2015 and guess what, by the time I review and revise this content in 2022 I have managed to read exactly zero pages of this book. I'd say this year is the year, but we both know that's not true.}, but I never get to them because something else always comes up... work to do, another book to read, a social event...
 
-In some systems this is a desirable property. It does not fulfill all short term scheduling criteria, notably response time and fairness. It may be suitable for life-and-safety-critical systems, such as the process to control a robot arm, to prevent a situation where the robot arm goes through the wall and the building falls down and you're dead.
+In some systems this is a desirable property. It does not fulfill all short term scheduling criteria, notably response time and fairness. It may be suitable for life-and-safety-critical systems, such as the process to control a robot arm, to prevent a situation where the robot arm goes through the wall and the building falls down and you're dead. Fairness is not as important as the lives of people, in this situation.
 
 \subsection*{First-Come, First-Served}
-This is an obvious algorithm that is simple to implement. Whichever process requests the CPU first gets the CPU first. Just imagine a queue of processes in which all processes are equal. A process enters the queue at the back and whichever process is at the front will be dequeued and get to run.  If the current process finishes or is blocked for some reason, the next ready process is selected. This is actually a simplification of the highest priority, period scheme, because it ignores priority altogether. All processes will get a chance to run eventually, so low priority processes will not starve.
+This is an obvious algorithm that is simple to implement. Whichever process requests the CPU first, gets the CPU first. Just imagine a queue of processes in which all processes are equal. A process enters the queue at the back and whichever process is at the front will be dequeued and get to run.  If the current process finishes or is blocked for some reason, the next ready process is selected. This is actually simpler than the highest priority, period scheme, because it ignores priority altogether. All processes will get a chance to run eventually, so low priority processes will not starve.
 
-FCFS can result in some undesirable outcomes. The average waiting time for processes might vary wildly. Consider if we have three processes, $P_{1}$, $P_{2}$, and $P_{3}$. Let us say that $P_{1}$ needs 24 units of CPU time; $P_{2}$ and $P_{3}$ require 3 units each.
+Life is full of FCFS systems and many of them result in a lot of waiting in line: if you call the phone company because they billed you incorrectly -- again -- then you get the displeasure of waiting in line for a very long time to speak to the next available agent who is currently busy assisting other callers. If you don't want to or can't wait so long, the best you can do is try calling again at a less busy time.
+
+FCFS can result in some suboptimal outcomes. The average waiting time for processes might vary wildly. Consider if we have three processes, $P_{1}$, $P_{2}$, and $P_{3}$. Let us say that $P_{1}$ needs 24 units of CPU time; $P_{2}$ and $P_{3}$ require 3 units each.
 
 \begin{center}
 	\includegraphics[width=0.7\textwidth]{images/fcfs-1.png}\\
@@ -80,12 +82,10 @@ Round Robin can be improved to Virtual Round Robin to address this unfairness. I
 \subsection*{Shortest Process Next}
 If some information is available about the total length of execution then we may wish to give priority to short processes. We let short processes go first to get them over with quickly. The reason is made clear by the second example of FCFS from earlier; though it still took 30 units of time, total, the average time to completion of a task was a lot lower when the shorter processes of $P_{2}$ and $P_{3}$ ran before $P_{1}$. This means we will get faster turnaround times and better responsiveness, but longer processes may be waiting an unpredictable amount of time.
 
-This is the sort of thing that used to happen in batch job processing on mainframes. The programmer was asked to give an estimate of the amount of time the program (e.g., compile) would run. If the programmer's estimate was too low, the program execution would be terminated early. If the programmer's estimate was too high, the job may never be scheduled to run, or at least, have to wait a very long time. 
-
 This might work, but you have noticed that the OS does not ask you, when you start a text editor, roughly how long you expect to be. Your boss on co-op may not be so accommodating. This is also a global assessment: how long the whole process takes. It might be better to worry about the length of CPU bursts and make decisions somewhat more locally...
 
 \subsection*{Shortest Job First}
-This strategy, unfortunately, is not given quite the right name, but it's the common name for the scheme. We should call it ``shortest next CPU burst'', but then again, the other sciences are not so good at naming things either... the Red Panda is not a Panda at all.
+This strategy, unfortunately, is not given quite the right name, but it's the common name for the scheme. We should call it ``shortest next CPU burst'', but then again, other sciences are not so good at naming things either... the Red Panda is not a Panda at all.
 
 Right, naming aside, the goal is to choose the process that is likely to have the smallest CPU burst. If two are the same, then FCFS can break the tie (or just choose randomly).  If we have 4 processes, $P_{1}$ through $P_{4}$, whose predicted burst times are 6, 8, 7, and 3 respectively, we should schedule then such that the order would be $P_{4}, P_{1}, P_{3}, P_{2}$:
 
