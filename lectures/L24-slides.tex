@@ -17,15 +17,28 @@
  \end{frame}
 
 
+\begin{frame}
+\frametitle{Push it to the Limit}
+
+\begin{center}
+	\includegraphics[width=\textwidth]{images/limit.jpg}
+\end{center}
+
+\url{https://www.youtube.com/watch?v=7Mhb9D35pkc}
+
+\url{https://www.youtube.com/watch?v=M22rNPh6bHo}
+
+\end{frame}
+
 
 \begin{frame}
 \frametitle{Push it to the Limit}
 
-Even with paging and moving pages into and out of memory, there is a limit. 
+Paging helps, but there is a limit. 
 
-A program that requires more memory than the machine's physical memory cannot run. 
+A program requiring more memory than the physical memory cannot run. 
 
-Maybe that seems ridiculous in the modern era of 4, 8, and 16~GB of memory. 
+Maybe that seems ridiculous in the modern era of 16, 32+GB?
 
 Server or supercomputer systems working on large datasets may require more memory than is available in the machine.
 
@@ -34,9 +47,9 @@ Server or supercomputer systems working on large datasets may require more memor
 \begin{frame}
 \frametitle{The Limits of Paging}
 
-What about multiprocessor systems?
+What about multi-\{user, processor, process\} systems?
 
-We could have a situation where the sum of memory requirements exceeds the available memory. 
+The sum of memory requirements exceeds the available memory. 
 
 A processor may be waiting because a process that is otherwise ready to run cannot proceed because there are insufficient free frames for it to run.
 
@@ -49,6 +62,11 @@ The problem is: a process must be entirely in memory or entirely on disk.
 
 In a lot of cases, the entire program is not needed at any given time. 
 
+\end{frame}
+
+\begin{frame}
+\frametitle{All or Nothing}
+
 Code to handle unusual situations may not be needed except occasionally.
 
  Startup code is needed at the beginning of the program, but then never again. 
@@ -60,7 +78,7 @@ Data structures and collections may be declared to be very large even when it is
 \begin{frame}
 \frametitle{Partially in Memory?}
 
-If we could execute programs that are only partly in memory, there would be three major benefits:
+Benefits if we could execute programs that are only partly in memory:
 
 \begin{enumerate}
 	\item A program is no longer constrained by the size of physical memory.
@@ -73,15 +91,21 @@ If we could execute programs that are only partly in memory, there would be thre
 \begin{frame}
 \frametitle{Good News, Everyone!}
 
+\begin{center}
+	\includegraphics[width=0.5\textwidth]{images/goodnews.jpg}
+\end{center}
+
 We have already discussed many of the key ideas to making this work. 
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Good News, Everyone!}
 
 The principle is really the same as caching. 
 
 Main memory can be viewed as yet another level of cache and the disk is the last stop where the data can be. 
 
-If a page is referenced and not currently in main memory, it is a page fault, and the page is loaded from disk into main memory. 
-
-A page might need to be evicted from main memory to make way for it; thus a page replacement algorithm is needed as well.
 
 \end{frame}
 
@@ -101,6 +125,11 @@ The typical approach is also like that of the cache; demand paging.
 
 A page is loaded into memory only if it is referenced or needed, thus preventing unnecessary disk accesses. 
 
+\end{frame}
+
+\begin{frame}
+\frametitle{Virtual Memory: Loading}
+
 This is also called the ``lazy'' approach.\\
 \quad Though lazy is typically an insult; in this case it is not necessarily bad.  
 
@@ -113,6 +142,10 @@ Goal: involve disk as little as possible, because disk is extremely slow.
 \frametitle{Thrashing}
 
 The fact that disk is so slow means we can get into a state called \alert{thrashing}. 
+
+\begin{center}
+	\includegraphics[width=0.4\textwidth]{images/thrashing2.png}
+\end{center}
 
 The operating system is spending most or all of its time swapping pages in and out of memory and very little actual work can get done.
 
