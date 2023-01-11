@@ -72,8 +72,7 @@ The write is, however, not instantaneous and in the meantime, the user can still
 
 \subsection*{Network Devices}
 
-Network devices are fundamentally different from those that are directly attached to the system. Thus, the \texttt{read}, \texttt{write}, and \texttt{seek} routines are not really appropriate. The model we are most familiar with from UNIX and Windows is that of \textit{sockets}. As the name suggests, the analogy to consider is electrical sockets (the ones you plug laptop chargers into, for example). We end up with a client-server model of communication: the server ``opens a socket'' to which the client ``plugs in'' when it wants to connect. This is exactly what happens when the ssh daemon is started; it opens a socket on the machine using port 22, and when a user wants to connect to that server via ssh, his or her ssh client connects to that socket. Then, packets of data can be exchanged between client and server.
-
+Network devices are fundamentally different from those that are directly attached to the system. Thus, the \texttt{read}, \texttt{write}, and \texttt{seek} routines are not really appropriate. The model we are most familiar with from UNIX and Windows is that of \textit{sockets}.
 To support servers with multiple clients, the socket interface has a function \texttt{select}, that manages a set of sockets. Invoking this function returns information about what sockets have a packet waiting to be received and which are available for sending a packet. Proper use of \texttt{select} eliminates polling and busy-waiting in a situation where delays are unpredictable (which is always the case with the network).
 
 
