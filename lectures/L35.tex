@@ -2,9 +2,9 @@
 
 \begin{document}
 
-\lecture{ 35 --- Virtualization and Cloud Computing }{\term}{Jeff Zarnett}
+\lecture{ 35 --- Virtualization and Containers }{\term}{Jeff Zarnett}
 
-\section*{Virtualization and Virtual Machines}
+\section*{Virtualization}
 
 The word virtualization itself can refer to many different aspects of computing, but the part that we really want to talk about is ``virtual machines''. The goal is to abstract the hardware of a single computer into several different execution environments, where we might have different operating systems running, or multiple copies of the same operating system, depending on what is desired. From the perspective of the operating system, however, it does not usually know that it is executing on an abstraction of the hardware. Comparisons to the movie ``The Matrix'' are apt: ``How would you know the difference between the dream world and the real world?''
 
@@ -91,8 +91,16 @@ The VMM can decide how to allocate I/O devices to guests; one way is to just ded
 
 The typical approach is to create a \textit{disk image}, that contains all the contents of the root disk of the guest. This is one big file (though it can be split up into manageable-sized chunks) and as far as the guest is concerned it has the run of that whole disk, totally unaware that the disk is just a file inside another system. This makes it a lot easier to move a virtual machine around from one system to another, if desired.
 
-\section*{Amongst the Clouds}
-Aside from the idea of the operating system being available inside a virtual machine, there can also be a \textit{Cloud Operating System}, which is the distributed operating system that manages the servers, networks, and other resources; this is distinct from the operating system you get when you log into a virtual machine that happens to run in the cloud~\cite{osi}.
+\section*{Containerize This!}
+
+Containerization gives many of the advantages of this separation of VMs, but without nearly so much overhead of the guest operating systems (both its maintenance and runtime costs). Containers are run by a container engine so there is some abstraction of the underlying hardware, and the container is assembled from a specification that says what libraries, tools, etc. are needed. And thus when the container is built and deployed it is sufficiently isolated but shares (in read only mode) where it can. So a container is a very lightweight VM, in some sense. See this diagram from~\cite{netappcontainer}:
+
+\begin{center}
+	\includegraphics[width=0.55\textwidth]{images/cvm.png}
+\end{center}
+
+Containers are a very effecting way of allowing virtualization, but a major potential limitation is that container applications can only run on hosts with the same OS and same virtualization features~\cite{osi}.
+
 
 \input{bibliography.tex}
 
