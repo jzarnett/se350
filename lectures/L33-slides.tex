@@ -24,6 +24,17 @@ Now it is time to go behind the scenes of how the file system lives up to the in
 
 The implementation is somewhat complicated, and to keep the size of the problem manageable we will worry about storing files on hard disks.
 
+\begin{center}
+	\includegraphics[width=0.35\textwidth]{images/hdd.jpg}
+\end{center}
+
+ \end{frame}
+
+
+
+\begin{frame}
+\frametitle{Implementing the Interface}
+
  Hard disks themselves make a good choice for this: they are sufficiently large and sufficiently cheap, to start with, to store the data that we want to store. 
  
  We can read an arbitrary part of the disk (unlike a tape). 
@@ -78,6 +89,14 @@ Disks may be split, logically, into several different areas, or \alert{partition
 
 There will be a partition table (sometimes called superblock/master file table).
 
+\end{frame}
+
+\begin{frame}
+\frametitle{Splitting it Up}
+
+\begin{center}
+	\includegraphics[width=0.75\textwidth]{images/partition-map.png}
+\end{center}
 
 In the Windows world we often see the whole disk is in one logical partition (the C: drive, for example, taking the whole primary disk). 
 
@@ -124,6 +143,11 @@ The file system must then check the global open file table to see if the file is
 
 If that file is opened for exclusive access, the open routine returns with an error. 
 
+\end{frame}
+
+\begin{frame}
+\frametitle{Opening a File}
+
 If non-exclusive access, then there is no need to search for the file or retrieve it by directory; we just make another reference in the process open file table. 
 
 If the file is not already open, then it needs to be retrieved. 
@@ -162,9 +186,20 @@ Metadata may be updated on close.
 \begin{frame}
 \frametitle{Metadata Example: Searching with Spotlight}
 
-An example from Mac OS~X: the Spotlight system-wide desktop search. 
+An example from Mac OS~X/macOS: the Spotlight system-wide desktop search. 
 
 It was a revelation compared to the previous search options that were slow and did not necessarily include the file content.
+
+\begin{center}
+	\includegraphics[width=0.3\textwidth]{images/sherlock175.jpg}
+\end{center}
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Metadata Example: Searching with Spotlight}
 
 Spotlight runs queries quickly over the metadata of the system. 
 
