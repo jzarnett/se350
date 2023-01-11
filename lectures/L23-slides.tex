@@ -25,6 +25,10 @@
 \end{quote}
 \hfill - Nicholas Armstrong
 
+\begin{center}
+	\includegraphics[width=0.4\textwidth]{images/cacherules.jpg}
+\end{center}
+
 \end{frame}
 
 \begin{frame}
@@ -70,9 +74,11 @@ We will assume that a cache line maps nicely to a page.
 
 As discussed, the CPU generates a memory address for a read/write operation. 
 
-The address will be mapped to a page. 
+The address will be mapped to a page; ideally that page is in the cache.
 
-Ideally, the page is found in the cache, because that would be faster. 
+\begin{center}
+	\includegraphics[width=0.5\textwidth]{images/battleship.jpg}
+\end{center}
 
 If the requested page is, in fact,  in the cache, we call that a cache \alert{hit}.
 
@@ -94,11 +100,11 @@ A page miss is also called a \alert{page fault}.
 
 The percentage of the time  a page is found in the cache is called the \alert{hit ratio}.
 
-We can calculate the effective access time if we have an estimate of the hit ratio.
+\begin{center}
+	\includegraphics[width=0.4\textwidth]{images/hitratio.jpg}
+\end{center}
 
-We need some measurements of how long it takes to:\\
-\quad (1) Load data from the cache;\\
-\quad (2) Load data from memory. 
+We can calculate the effective access time if we have an estimate of the hit ratio.
 
 \end{frame}
 
@@ -180,10 +186,10 @@ We could, of course, just select a random page...\\
 \frametitle{Page Replacement Algorithms}
 To make an intelligent decision about what sort of strategy to choose, we need to know a few things about how data is accessed in a system.
 
-A few observations about memory accesses:
+
 
 \begin{enumerate}
-	\item A rule of thumb in software engineering: the 90/10 rule.
+	\item The 90/10 rule.
 	\item The principle of \alert{temporal locality}. 
 	\item The principle of \alert{spatial locality}.
 \end{enumerate}
@@ -208,6 +214,11 @@ If a page has been altered in cache, then that change has to be written to main 
 
 It can be done immediately when the page is changed, or it can be done when the page is evicted from the cache. 
 
+\end{frame}
+
+\begin{frame}
+\frametitle{Writing It Out}
+
 The second option means fewer main memory accesses, if a page is written to multiple times before it is sent to main memory.
 
 If that memory is shared, however, between multiple processors or an I/O device, then the delay in updating main memory may be intolerable. 
@@ -220,7 +231,7 @@ If that memory is shared, however, between multiple processors or an I/O device,
 
 If a page has not been modified in cache, it can simply be overwritten. 
 
-If all other factors are equal, we should replace a page that has not been modified, as the work to write it out to memory need not be done.
+If all other factors are equal, we should replace a page that has not been modified.
 
 Just overwrite it with the new one!
 
@@ -243,38 +254,36 @@ The selected page is the one with the highest value.
 
 Unfortunately, there is a glaring flaw: it is impossible to implement. 
 
-It requires clairvoyance, and, at least as far as I know, nobody has invented a way to do so reliably. 
-
-The program and OS have no real way of knowing which pages will be used in the future; they can only guess.
+\begin{center}
+	\includegraphics[width=\textwidth]{images/palantir.jpg}
+\end{center}
 
 \end{frame}
 
 \begin{frame}
 \frametitle{The Optimal Algorithm}
 
-It is unimplementable so why talk about it?
-
-It is mostly a benchmark against which other algorithms can be compared. 
+It is unimplementable so why talk about it? Benchmark!
 
 Suppose an algorithm is, say, 1\% less efficient than the hypothetical optimal.
 
 No matter how much we improve it, the max performance increase is 1\%.
 
-
 \end{frame}
+
+
+
 
 \begin{frame}
 \frametitle{Not Recently Used}
 
 Operating systems may collect page usage statistics. 
 
-If so, we may have two status bits associated with each page, called $R$ and $M$.
 
 The $R$ bit is set when a page is referenced (either read or written).\\
 The $M$ bit is set when the page is written to (modified). 
 
 Once a bit is set, it remains so until the OS changes its value. 
-
 
 \end{frame}
 
@@ -286,8 +295,6 @@ The $R$ and $M$ bits can used to build a paging algorithm.
 Initially, $R$ and $M$ are 0. 
 
 Periodically, the $R$ bit is cleared to identify pages not recently referenced. 
-
-This may happen every clock interrupt, for example.
 
 \end{frame}
 
@@ -331,6 +338,15 @@ If a page is not going to be referenced again (or at least, for a very long time
 
 Often times, however, the same page is referenced repeatedly, and this algorithm does not take that into account. 
 
+\begin{center}
+	\includegraphics[width=0.6\textwidth]{images/cannotlose.jpg}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{FIFO Replacement}
+
 If a page is referenced often, we want to keep it in memory, not evict it just because it has been in the cache the longest. 
 
 So FIFO is probably not the best choice.
@@ -341,6 +357,16 @@ So FIFO is probably not the best choice.
 \frametitle{A Second Chance (The Clock)}
 
 Attempt to improve on the FIFO algorithm.
+
+\begin{center}
+	\includegraphics[width=0.5\textwidth]{images/secondbreakfast.jpg}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{A Second Chance (The Clock)}
+
 
 Give pages a ``second chance'' based on the $R$ bit.
 
@@ -369,6 +395,10 @@ Thus the algorithm will eventually terminate.
 The index is updated whenever this happens so a page that got a second chance is not the ``oldest'' anymore. 
 
 In some textbooks this is called the Clock replacement algorithm because we can think of the cache as a circular buffer.
+
+\begin{center}
+	\includegraphics[width=0.3\textwidth]{images/mathclock.jpg}
+\end{center}
 
 The current oldest page is depicted being pointed to by the hand of the clock.
 
