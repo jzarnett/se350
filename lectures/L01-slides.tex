@@ -25,7 +25,7 @@ As our first order of business, let's go over the course syllabus.
 \begin{frame}
 \frametitle{Collaborative Course}
 
-The source material for the SE~350 notes and slides is now open-sourced via Github. 
+The source material for the SE~350 notes and slides is open-sourced via Github. 
 
 If you find an error in the notes/slides, or have an improvement, go to \url{https://github.com/jzarnett/se350} and open an issue. 
 
@@ -45,16 +45,26 @@ If you know how to use \texttt{git} and \LaTeX, then you can go to the URL and s
 
 \end{frame}
 
+
+\begin{frame}
+\frametitle{Introduction to Operating Systems}
+
+\begin{center}
+	\includegraphics[width=.6\textwidth]{images/linux-user.jpg}
+\end{center}
+
+
+\end{frame}
+
+
 \begin{frame}
 \frametitle{Introduction to Operating Systems}
 
 An operating system (OS) sits between the hardware and programs.
 
-It does many different things.
+It has many goals, that often conflict with one another.
 
-It has many often-conflicting goals.
-
-You might think of the OS as the ``secretary'' of the system.
+Its job is to make it so other programs can run efficiently.
 
 \end{frame}
 
@@ -103,6 +113,10 @@ Multiple programs means some resources are shared.\\
 
 OS creates and enforces the rules so all can get along.
 
+\begin{center}
+	\includegraphics[width=0.4\textwidth]{images/sharing-is-caring.jpg}
+\end{center}
+
 Sometimes processes want to co-operate and not compete.\\
 \quad The OS can help them to do so.
 
@@ -113,9 +127,12 @@ Sometimes processes want to co-operate and not compete.\\
 \frametitle{OS: Efficiency}
 Another goal may be to use the computer hardware efficiently.
 
-Any moment when the supercomputer is not doing useful work is a waste.
+\begin{center}
+	\includegraphics[width=0.7\textwidth]{images/supercomputer.jpg}
+\end{center}
+\hfill Image Credit: Argonne National Laboratory
 
-There are always programs eager to run.
+Any moment when the supercomputer is not doing useful work is a waste.
 
 \end{frame}
 
@@ -140,44 +157,227 @@ There will be new hardware released, new types of hardware, new services added, 
 
 Evolution is constrained: a need to maintain compatibility for programs. 
 
-Microsoft Windows: strict devotion to not breaking binary compatibility.
+\begin{center}
+	\includegraphics[width=0.7\textwidth]{images/linus-angry.jpg}
+\end{center}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Example: SimCity and Windows 95}
+
+\begin{center}
+	\includegraphics[width=0.85\textwidth]{images/simcity.png}
+\end{center}
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Security Now}
+
+\begin{center}
+	\includegraphics[width=0.9\textwidth]{images/security-team.png}
+\end{center}
+
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Security Now}
+
+In many textbooks, security and protection are left to the end.
+
+Security has to be designed from the beginning; cannot be bolted on.
+
+An OS supports multiple users with multiple tasks.
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Tool Support}
+
+OS designers create policies and policy tools.
+
+There is a tradeoff with usability.
+
+You do NOT want to have to report a data breach.
+
+\begin{center}
+	\includegraphics[width=0.35\textwidth]{images/security-budget.png}
+\end{center}
+
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Enforcement is Everything}
+
+The OS must enforce the configured policies.\\
+\quad Otherwise, malicious users exploit it.
+
+Three desirable properties: Confidentiality, Integrity, Availability.
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Protection vs Security}
+
+Protection is about internal threats.
+
+Security is about external threats.
+
+We'll take them in order.
+
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Protection}
+
+\begin{center}
+	\includegraphics[width=\textwidth]{images/protection.jpg}
+\end{center}
+
 
 \end{frame}
 
 \begin{frame}
-\frametitle{Systems Programming}
-Operating systems themselves are not the whole picture.
+\frametitle{Protection}
 
-Systems programming: the next layer above the OS itself.
+Most of the discussion in this course is about protection.
 
-Useful tools, but they are not part of the kernel. 
+Following the rules is important to a functioning system or society.
+
+Even in the absence of malicious intent.
+
 
 \end{frame}
 
-\begin{frame}
-\frametitle{Systems Programming}
 
-Some examples of systems programming:
+\begin{frame}
+\frametitle{Goals of Protection}
+
+Enforce policies about responsible usage.
+
+Responsible and reasonable vary across systems.
+
+Examples of access control: file permissions, walls between processes.
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Enforcement is Key}
+
+Rules take effort to enforce.
+
+Exceptions are allowed and administrators can override policies!
+
+\begin{center}
+	\includegraphics[width=0.4\textwidth]{images/override.jpg}
+\end{center}
+
+Other kinds of rules can exist.
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Context is Key}
+
+If I edit a lecture video, it consumes a lot of CPU and RAM.
+
+Is that bad?
+
+It's legitimate -- but might set off alarms.
+
+So we may be lax -- which gives an opening to malicious users...
+
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Security}
+
+\begin{center}
+	\includegraphics[width=0.4\textwidth]{images/security-alert.png}
+\end{center}
+
+Let's consider a few bad things attackers can do.
+
+Why? We need this in mind when designing the system.
+
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Security Problems}
 
 \begin{itemize}
-	\item \textbf{File Manipulation}
-	\item \textbf{Status Information}
-	\item \textbf{Programming-Language Support}
-	\item \textbf{Communication}
+	\item Breach of Confidentiality
+	\item Breach of Integrity
+	\item Theft of Service
+	\item ... and others.
 \end{itemize}
 
+Most likely the weak link is people.
+
 \end{frame}
+
 
 \begin{frame}
-\frametitle{Systems Programming}
+\frametitle{Specific Attacks}
+A few potential specific attacks:
 
-Programming at this level is more difficult than regular programs. 
+\begin{itemize}
+	\item \textbf{Excessive Requests}
+	\item \textbf{Malformed Requests}
+	\item \textbf{Back Door}
+	\item \textbf{Intercepting Messages}
+	\item \textbf{Trojan Horse}
+\end{itemize}
 
-It may require knowledge of the hardware, or perhaps programming facilities like debugging are limited. 
-
-Systems programs must take concurrency into account.
 
 \end{frame}
+
+
+\begin{frame}
+\frametitle{Arms Race}
+
+Security is an arms race.
+
+Can we break things if it's a security problem?
+
+No easy answers.
+
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Security, Conclusion}
+
+This is not a course in security, but we can't ignore it.
+
+Security needs to be included from the beginning!
+
+
+\end{frame}
+
+
+
+
 
 
 \end{document}
