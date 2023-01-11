@@ -1,6 +1,6 @@
 \input{configuration}
 
-\title{Lecture 35 --- Virtualization and Cloud Computing }
+\title{Lecture 35 --- Virtualization and Containers }
 
 \author{Jeff Zarnett \\ \small \texttt{jzarnett@uwaterloo.ca}}
 \institute{Department of Electrical and Computer Engineering \\
@@ -20,7 +20,20 @@
 \begin{frame}
 \frametitle{Virtualization and Virtual Machines}
 
-The word virtualization itself can refer to many different aspects of computing, but the part that we really want to talk about is ``virtual machines''. 
+The word virtualization itself can refer to many different aspects of computing.
+
+\begin{center}
+	\includegraphics[width=\textwidth]{images/virtualmachine.jpg}
+\end{center}
+
+The part that we really want to talk about is ``virtual machines''. 
+
+ \end{frame}
+
+
+
+\begin{frame}
+\frametitle{Virtualization and Virtual Machines}
 
 The goal is to abstract the hardware of a single computer into several different execution environments. 
 
@@ -33,8 +46,12 @@ We might have different operating systems running, or multiple copies of the sam
 
 From the perspective of the operating system, however, it does not usually know that it is executing on an abstraction of the hardware. 
 
-Comparisons to the movie ``The Matrix'' are apt: ``How would you know the difference between the dream world and the real world?''
 
+\begin{center}
+	\includegraphics[width=0.7\textwidth]{images/redbluepill.jpg}
+\end{center}
+
+``How would you know the difference between the dream world and the real world?''
 
 
 \end{frame}
@@ -95,7 +112,16 @@ Use an OS other than Windows?
 
 You are likely to have had the situation where one or more programs that are needed for some purpose (work, school...) function only under Windows. 
 
+\end{frame}
+
+\begin{frame}
+\frametitle{Requires Windows XP}
+
 And as the versions of Windows have proliferated and evolved, older programs have sometimes stopped working.
+
+\begin{center}
+	\includegraphics[width=0.5\textwidth]{images/winxp.jpg}
+\end{center}
 
 So this necessitates a past version (Windows XP will never, ever die...).
 
@@ -122,6 +148,11 @@ The guests are isolated from the host and vice versa.
 
 If a virus infects one of the guests, the other guests are not affected. 
 
+\end{frame}
+
+\begin{frame}
+\frametitle{Protection}
+
 And with a virtual machine, it will be that much easier to delete and reinstall the guest or roll it back to an earlier state. 
 
 This would be exactly the state that we have stored when suspending it...
@@ -132,15 +163,11 @@ This would be exactly the state that we have stored when suspending it...
 \begin{frame}
 \frametitle{Consolidation}
 
-We often see consolidation in data centres. 
 
 Many servers running that could be sharing the same physical hardware. 
 
 Instead of having a lot of lightly used physical systems, convert them to virtual and put them all in the same physical machine. 
 
-This is combined with a utility: convert a physical machine to a virtual one.
-
-All the system data and configuration and such is copied and turned into a snapshot and this snapshot is then started up inside the virtual machine.
 
 \end{frame}
 
@@ -195,6 +222,11 @@ Non-privileged instructions just execute natively on the hardware; they are as f
 
 Unfortunately, with trap-and-emulate, privileged instructions have this extra overhead, causing the guest to run more slowly than it otherwise would. 
 
+\end{frame}
+
+\begin{frame}
+\frametitle{Trap-and-Emulate Speed}
+
 Hardware designers have come to the rescue again: some CPUs have more than just the two simple modes (user/kernel).
 
 They keep track in hardware of virtual user and virtual kernel mode. 
@@ -210,6 +242,11 @@ That relieves the VMM from the responsibility of keeping track of it.
 Sadly, some CPUs do not have clear definitions of privileged vs. non-privileged instructions, including the intel x86 architecture. 
 
 There were a lot of decisions that make no sense if we look at them with what we know today, but they ``seemed like a good idea at the time''. 
+
+\end{frame}
+
+\begin{frame}
+\frametitle{There's a Catch...}
 
 The x86 architecture started back in the early 1970s and we can hardly fault the designers for not anticipating what was going to happen 30-40 years later. 
 
@@ -458,6 +495,43 @@ The guest is totally unaware that the disk is just a file inside another system.
 
 This makes it easy to move a virtual machine from one system to another.
 \end{frame}
+
+\begin{frame}
+\frametitle{Containerize Me, Captain}
+
+\begin{center}
+	\includegraphics[width=0.7\textwidth]{images/container.jpeg}
+\end{center}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{How Did We Get Here?}
+
+\begin{itemize}
+	\item Manual install
+	\item Package Manager (RPM/JAR/DLL Hell)
+	\item Virtual Machines
+	\item Containerization
+\end{itemize}
+
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Containers}
+
+See this diagram from NetApp:
+
+\begin{center}
+	\includegraphics[width=0.7\textwidth]{images/cvm.png}
+\end{center}
+
+
+\end{frame}
+
 
 
 \end{document}
