@@ -21,11 +21,27 @@
 
 In a simple system with $n$ frames free in the system, demand page all of them. 
 
+
+
+\begin{center}
+	\includegraphics[width=0.3\textwidth]{images/pages-elsewhere.jpg}
+\end{center}
+
 Initially, all frames are empty, and as needed, pages are read into those frames. 
+
+ \end{frame}
+
+
+\begin{frame}
+\frametitle{Allocation of Frames}
 
 Once all $n$ frames are filled with pages, page $n+1$ must replace a page already in a frame (because there is no more space). 
 
 When a process terminates, all its frames are marked as free. In theory, one process could fill all the frames in the system. 
+
+\begin{center}
+	\includegraphics[width=0.3\textwidth]{images/allmine.jpg}
+\end{center}
 
 This is as simple as it can be; from there we can build on it.
 
@@ -35,15 +51,22 @@ This is as simple as it can be; from there we can build on it.
 \begin{frame}
 \frametitle{Make a Reservation}
 
-We might reserve a few pages to be free at all times for performance reasons. 
+We might reserve a few pages to be free at all times for performance reasons
+
+\begin{center}
+	\includegraphics[width=0.5\textwidth]{images/reservation.jpg}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Make a Reservation}
 
 When we want to move a page into a frame, if all of the frames are full, we select a victim and write that victim out to disk if necessary. 
 
 If we keep a few frames free, the newly-read page can be read into one of the free frames, and we can write the old page out to disk at a convenient time. 
 
 The read does not need to wait for the write.
-
-Therefore the user process continues a bit sooner than it otherwise would.
 
 \end{frame}
 
@@ -64,11 +87,9 @@ The maximum number of frames a process could have is the maximum number of frame
 
 The motivation behind a minimum number of frames is ostensibly performance. 
 
-As long as our page replacement algorithm is sane (i.e., not FIFO), adding more frames reduces the page fault rate. 
+More frames is usually better!
 
-As we demonstrated earlier, a page fault is a huge performance decrease. 
-
-This is not the only reason.
+But what determines the minimum?
 
 \end{frame}
 
@@ -76,6 +97,17 @@ This is not the only reason.
 \frametitle{Minimum Frames}
 
 The absolute minimum number of frames is determined by the architecture. 
+
+\begin{center}
+	\includegraphics[width=0.75\textwidth]{images/architecture.jpg}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Minimum Frames}
+
+
 
 Imagine a machine where a memory reference instruction may contain one memory address.
 
@@ -109,6 +141,15 @@ In theory, the problem could be infinitely bad if the computer architecture allo
 The address being referenced could be on another page. 
 
 That instruction could then reference another indirect address, and it's turtles all the way down.
+
+\begin{center}
+	\includegraphics[width=0.5\textwidth]{images/bargain.jpg}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Minimum Fames: Infinite?}
 
 The standard solution is to limit the levels of indirection to some value.
 
@@ -161,15 +202,7 @@ $a_{i} = s_{i} / S \times (m - k)$.
 
 This value of $a_{i}$ is only an estimate. 
 
-It may not divide evenly. 
-
-We can only allocate an integer number of frames to each process.  
-
-So we will have to raise or lower $a_{i}$ a bit to make it an integer. 
-
-If $a_{i}$ is below the minimum number of frames, then it needs to get bumped up.
-
-We also must respect the limits of the system: the sum of all $a_{i}$ values may not exceed the total frames of memory (minus the OS reserve).
+It may not divide evenly: rounding is required; minimums need to be enforced.
 
 A few of the larger processes may need to have their allocations nudged down.
 
@@ -181,13 +214,18 @@ A few of the larger processes may need to have their allocations nudged down.
 
 Note that with proportional allocation, as with equal allocation, there is no regard given to the priorities of the processes. 
 
-Normally, we would want to give more frames to higher priority processes so their page fault rates are lower and they can therefore execute more quickly. 
+We could modify the $a_{i}$ values according to process priority. 
 
-So we could modify the $a_{i}$ values according to process priority. 
+Priority matters a lot in scheduling... soon...
 
-The subject of priority is something we have not yet examined much yet, but will do so soon when we get to talking about scheduling; the next major topic. 
+\end{frame}
 
-But, first, let's finish what we are doing with memory.
+\begin{frame}
+\frametitle{Local and Global Replacement}
+
+\begin{center}
+	\includegraphics[width=0.7\textwidth]{images/global-local.jpg}
+\end{center}
 
 \end{frame}
 
@@ -222,7 +260,7 @@ They will acquire more pages than get taken from them.
 
 It might make sense to watch to see how many frames each process has. 
 
-It may be desirable to prevent a process from falling below the minimum number of pages.
+Goal: prevent a process from falling below the minimum number of pages.
 
 Or we swap completely to disk a process that no longer meets that threshold.
 
@@ -246,6 +284,15 @@ Aside from intentionally depriving the system of RAM, how can we get into this s
 In simple operating systems, the logic that controlled how many processes to run at a time would rely just on the CPU utilization. 
 
 If CPU utilization is low, the CPU needs more work to do! 
+
+\begin{center}
+	\includegraphics[width=0.4\textwidth]{images/backtowork.jpg}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Thrashing}
 
 Assign it more work by starting or bringing more processes into memory. 
 
@@ -354,22 +401,6 @@ Unfortunately, there is no good way to know or to figure this out. So we will ha
 \end{frame}
 
 \begin{frame}
-\frametitle{Guessing?!}
-
-You may hate the idea of guessing. 
-
-As a general engineering practice, ``let's do an experiment and find out'' is good, provided you can analyze the result and if things go wrong, no damage is done. 
-
-Those last conditions make it kind of infeasible to do medical experiments just to see what would happen, or for NASA to play around with satellites in orbit. 
-
-So in those cases, a simulation is probably the better approach. 
-
-Even so, sometimes we don't have (or can't get) the data we need and we will therefore need to ``make our best guess''.
-
-
-\end{frame}
-
-\begin{frame}
 \frametitle{Making Our Best Guess}
 
 What do we know about process memory accesses? 
@@ -377,6 +408,11 @@ What do we know about process memory accesses?
 They tend to obey the principle of locality, both temporal and spatial.
 
 We could think of different parts of the program as different localities, as if they were areas on a map. And localities may overlap sometimes. 
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Making Our Best Guess}
 
 Give a process enough frames for its locality. 
 
@@ -500,6 +536,14 @@ When it come time to move to a new locale, the page fault rate rises until the p
 
 Imagine that you have moved to a new city for a co-op term. 
 
+\begin{center}
+	\includegraphics[width=0.75\textwidth]{images/explorenearby.jpg}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Working Set Analogy}
 When you have just moved, you will frequently rely on Google Maps to find what you are looking for and how to get there. 
 
 You need to buy groceries, so you ask Google for directions to the nearest grocery store of choice. 

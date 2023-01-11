@@ -24,6 +24,14 @@ Earlier we saw one example of a simple scheduling algorithm.
 
 Always choose the highest priority (non-blocked) task, and execute it. 
 
+ \end{frame}
+
+
+
+\begin{frame}
+\frametitle{Scheduling Algorithms}
+
+
 There are many options:
 \begin{enumerate}
 	\item Highest Priority, Period
@@ -44,15 +52,13 @@ There are many options:
 \begin{frame}
 \frametitle{Scheduling Criteria}
 
-The OS may maintain data about each process to be used in making decisions about scheduling:
+Data about each process to be used in making decisions about scheduling:
 
 \begin{enumerate}
 	\item The time spent waiting to run.
 	\item The time spent executing.
 	\item The total time of execution.
 \end{enumerate}
-
-The first two can be measured; the third must be estimated or supplied.
 
 Desktop OSes do not ask users for estimates, but supercomputers might.
 
@@ -61,9 +67,16 @@ Desktop OSes do not ask users for estimates, but supercomputers might.
 \begin{frame}
 \frametitle{Highest Priority, Period}
 
-Implementing this is not difficult; priority queues (one for each priority level).
+\begin{center}
+	\includegraphics[width=\textwidth]{images/geringverdiener.jpg}
+\end{center}
 
-If a task is not blocked, put it in its appropriate priority queue. 
+\end{frame}
+
+\begin{frame}
+\frametitle{Highest Priority, Period}
+
+Implementing this is not difficult; priority queues (one for each priority level).
  
 If the process's priority is changed, move it to its new home. 
 
@@ -71,8 +84,11 @@ We might have a priority heap, or just one big linked list or array that we keep
 
 \end{frame}
 
+
+
 \begin{frame}
 \frametitle{Highest Priority, Period}
+
 
 The flaw in this has already been identified: it is vulnerable to starvation. 
 
@@ -96,6 +112,18 @@ Example: control a robot arm, to prevent a situation where the robot arm goes th
 
 \end{frame}
 
+
+\begin{frame}
+\frametitle{First-Come, First-Served}
+
+\begin{center}
+	\includegraphics[width=0.5\textwidth]{images/dmv.jpg}
+\end{center}
+
+
+\end{frame}
+
+
 \begin{frame}
 \frametitle{First-Come, First-Served}
 
@@ -105,12 +133,22 @@ Whichever process requests the CPU first gets the CPU first.
 
 Just imagine a queue of processes in which all processes are equal. 
 
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{First-Come, First-Served}
+
+
 A process enters the queue at the back and whichever process is at the front will be dequeued and get to run.  
 
 If the current process finishes or is blocked for some reason, the next ready process is selected. 
 
 
 \end{frame}
+
+
 
 \begin{frame}
 \frametitle{First-Come, First-Served}
@@ -178,6 +216,18 @@ So in theory, one process could monopolize the CPU (remember that some people ar
 If we modify FCFS with periodic preemption, then we get Round Robin.
 
 \end{frame}
+
+
+\begin{frame}
+\frametitle{Round Robin}
+
+\begin{center}
+	\includegraphics[width=0.5\textwidth]{images/roundrobin.jpg}
+\end{center}
+
+
+\end{frame}
+
 
 \begin{frame}
 \frametitle{Round Robin}
@@ -247,6 +297,17 @@ So CPU-Bound processes are getting more of the CPU time.
 \begin{frame}
 \frametitle{Virtual Round Robin}
 
+\begin{center}
+	\includegraphics[width=0.75\textwidth]{images/virtualrobin.jpg}
+\end{center}
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Virtual Round Robin}
+
 Round Robin can be improved to Virtual Round Robin to address this. 
 
 It works like Round Robin, but a process that gets unblocked after I/O gets higher priority.
@@ -275,6 +336,18 @@ If dispatched from the auxiliary queue, it runs for up to the as-yet-unused frac
 
 
 \end{frame}
+
+
+\begin{frame}
+\frametitle{Shortest Process Next}
+
+\begin{center}
+	\includegraphics[width=0.65\textwidth]{images/quick-adventure.png}
+\end{center}
+
+
+\end{frame}
+
 
 \begin{frame}
 \frametitle{Shortest Process Next}
@@ -317,6 +390,18 @@ It might be better to worry about the length of CPU bursts and make decisions so
 
 \end{frame}
 
+
+\begin{frame}
+\frametitle{Shortest Job First}
+
+\begin{center}
+	\includegraphics[width=0.5\textwidth]{images/quick-update.jpg}
+\end{center}
+
+
+\end{frame}
+
+
 \begin{frame}
 \frametitle{Shortest Job First}
 
@@ -325,6 +410,18 @@ This strategy, unfortunately, is not given quite the right name, but it's the co
 We should call it ``shortest next CPU burst''.
 
 Then again, the other sciences are not so good at naming things either... the Red Panda is not a Panda at all.
+
+\begin{center}
+	\includegraphics[width=0.4\textwidth]{images/redpanda.jpg}
+\end{center}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Shortest Job First}
+
+
 
 Choose the process that is likely to have the smallest CPU burst. 
 
@@ -444,6 +541,18 @@ If there is a constant stream of shorter processes, they will continue to get sc
 
 
 \end{frame}
+
+
+\begin{frame}
+\frametitle{Shortest Remaining Time}
+
+\begin{center}
+	\includegraphics[width=0.7\textwidth]{images/stay-on-target.jpg}
+\end{center}
+
+
+\end{frame}
+
 
 \begin{frame}
 \frametitle{Shortest Remaining Time}

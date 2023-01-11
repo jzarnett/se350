@@ -20,7 +20,20 @@
 \begin{frame}
 \frametitle{Scheduling Algorithms, Continued}
 
+\begin{center}
+	\includegraphics[width=0.3\textwidth]{images/theresmore.jpg}
+\end{center}
+
 Carrying on from last time, we will examine some more scheduling algorithms.
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Highest Response Ratio Next}
+
+\begin{center}
+	\includegraphics[width=0.8\textwidth]{images/responsive.jpg}
+\end{center}
 
 \end{frame}
 
@@ -32,6 +45,11 @@ We will introduce a new measure: \alert{normalized turnaround time}.
 This is the ratio of the turnaround time (the time waiting plus the amount of time taken to execute) to the service time (the time it takes to execute). 
 
 We can tolerate longer processes waiting a comparatively longer period of time. 
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Highest Response Ratio Next}
 
 Goal: minimize not only the normalized turnaround time for each process, but to minimize the average over all processes.
 
@@ -60,6 +78,10 @@ Jobs with a small $s$, i.e., short jobs, are likely to get scheduled quickly.
 
 The HRRN approach introduces something important: age of the process. 
 
+\end{frame}
+
+\begin{frame}
+\frametitle{HRRN}
 
 A process that has spent a long time waiting rises in priority until it gets a turn. 
 
@@ -73,9 +95,25 @@ We still need to estimate $s$, which may or may not be simple guessing.
 \begin{frame}
 \frametitle{Multilevel Queue (Feedback)}
 
+\begin{center}
+	\includegraphics[width=0.6\textwidth]{images/levels1.jpg}
+	\includegraphics[width=0.6\textwidth]{images/levels2.jpg}
+\end{center}
+
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Multilevel Queue (Feedback)}
+
 For the most part, until now, we have treated processes more or less equally (except when we have taken the highest priority process). 
 
 While it might seem very fair, it may not be ideal for a situation where processes behave differently. 
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Multilevel Queue (Feedback)}
 
 A desktop or laptop has many processes running (foreground/background). 
 
@@ -91,6 +129,16 @@ The multilevel queue takes the ready queue and breaks it up into several.
 A process can be in one (but only one) of the queues. 
 
 It is assigned to the queue based on some attribute of the process (priority, memory needs, foreground/background, et cetera). 
+
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Multilevel Queue (Feedback)}
+
+\begin{center}
+	\includegraphics[width=\textwidth]{images/choice-sweat.jpg}
+\end{center}
 
 The foreground queue, for example, could be scheduled by Round Robin, and the background by First-Come, First-Served.
 
@@ -116,6 +164,11 @@ An example of this was the Compatible TimeSharing System on the IBM~7094.
 Give CPU-Bound processes longer blocks of time to execute so they would not have to spend so much time swapping. 
 
 In the highest priority class, a process got 1 time slice; in the next one down, a process got 2 time slices; the third class meant 4 time slices, and so on. 
+
+\end{frame}
+
+\begin{frame}
+\frametitle{MLQ Example: CTSS}
 
 If a process ran up against the limit of a time slice it was moved down a class. 
 
@@ -143,6 +196,15 @@ If the user pressed the Enter key, it might be a sign the process was likely to 
 
 Some genius user (there's always one), figured out that by pressing the enter button repeatedly, his long running processes would finish faster. 
 
+\begin{center}
+	\includegraphics[width=0.4\textwidth]{images/meddling.jpg}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{CTSS: Meddling Users}
+
 This was a bit unfair; his processes got priority over the others. 
 
 Things really broke down when this individual decided to be nice:\\
@@ -164,6 +226,15 @@ Assign priority based on the amount of CPU time assigned so far.
 
 A process that has used a lot of CPU so far gets lower priority.
 
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Guaranteed Scheduling}
+
+\begin{center}
+	\includegraphics[width=\textwidth]{images/guarantee.jpg}
+\end{center}
 
 \end{frame}
 
@@ -198,6 +269,15 @@ So the scheduling algorithm is then to run the process with the lowest score, tr
 \frametitle{Lottery}
 
 The lottery is a system to give predictable results with a simple implementation. 
+
+\begin{center}
+	\includegraphics[width=0.5\textwidth]{images/lottery.jpg}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Lottery}
 
 The premise is that every process gets some number of ``lottery tickets'' for each resource (e.g., CPU). 
 
@@ -263,7 +343,16 @@ If process $A$ has 20\% of the tickets, $B$ has 30\%, and $C$ has 50\%, then the
 
 Sometimes our scheduling algorithm cannot produce a new process to run next because there is, quite frankly, nothing to do. 
 
+\begin{center}
+	\includegraphics[width= \textwidth]{images/bored.jpg}
+\end{center}
+
 The actual implementation of the idle thread may vary across different systems. 
+
+\end{frame}
+
+\begin{frame}
+\frametitle{The Idle Task}
 
 In some cases it is just repeatedly invoking the scheduler.\\
 \quad In others it does a bit of useless addition.\\
@@ -279,6 +368,11 @@ Whatever it actually ``does'', the idle thread never has any dependencies on any
 \frametitle{The Idle Task}
 
 Since the idle task does not necessarily do much, why have it? 
+
+\end{frame}
+
+\begin{frame}
+\frametitle{The Idle Task}
 
 It prevents having special cases in the scheduler, first of all. 
 
@@ -299,6 +393,12 @@ Saving power by shutting down (parts of) the processor seems like a nice savings
 
 But: time when the CPU is doing nothing might potentially be put to use.
 
+\end{frame}
+
+\begin{frame}
+\frametitle{Making Use of The Time}
+
+
 There are usually some accounting and housekeeping tasks that the CPU can be doing when it has nothing else. 
  
 For example, the OS could collect statistical data, or defragment the hard drive.
@@ -310,6 +410,16 @@ For example, the OS could collect statistical data, or defragment the hard drive
 \frametitle{Bumping the Priority}
 
 Sometimes we get into a situation called a \alert{priority inversion}. 
+
+\begin{center}
+	\includegraphics[width=0.6\textwidth]{images/upsidedown.jpg}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Bumping the Priority}
+
 
 A high priority process is waiting for a low priority process. 
 
@@ -350,6 +460,10 @@ Its priority then falls, meaning $P_{1}$ will be selected and may continue.
 \frametitle{Priority Inheritance}
 
 A famous case of priority inversion took place on the Mars Pathfinder rover.
+
+\begin{center}
+	\includegraphics[width=0.5\textwidth]{images/pathfinder.jpg}
+\end{center}
 
 The solution was to enable priority inheritance.
 
@@ -513,7 +627,6 @@ But in most of the modern operating systems we are familiar with, each processor
 
 There are two, non-exclusive approaches: \alert{push} and \alert{pull} migration. 
 
-It is called migration because a process migrates from one processor to another (it moves homes). 
 
 Push migration: a task periodically checks how busy each processor is and then moves processes around to balance things out (to within some tolerance). 
 

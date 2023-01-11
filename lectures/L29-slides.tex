@@ -30,7 +30,20 @@ But what is a real-time system?
 
 Supposed to respond to events within some real (wall-clock) time. 
 
+\begin{center}
+	\includegraphics[width=0.3\textwidth]{images/wallclock.jpg}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Real-Time Scheduling}
+
 There are deadlines, and there are consequences for missing deadlines. 
+
+\begin{center}
+	\includegraphics[width=\textwidth]{images/ticktock.jpg}
+\end{center}
 
 Fast is not as important as predictable.
 
@@ -52,6 +65,14 @@ A \alert{soft real-time} task has a deadline that is not, strictly speaking, man
 \frametitle{Hard Real-Time Failure}
 
 If a task is hard real-time, there are two scenarios in which it might not complete before its deadline. 
+
+Any ideas what they are?
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Hard Real-Time Failure}
+
 
 The first is that it is scheduled too late; like an assignment that will take two hours to complete being started one hour before the deadline. 
 
@@ -91,6 +112,10 @@ Remember Java's ``stop the world'' garbage collector scenario.
 
 If a process/task recurs at regular intervals, it is \alert{periodic}.
 
+\begin{center}
+	\includegraphics[width=0.3\textwidth]{images/bsg.jpg}
+\end{center}
+
 Periodic tasks are very common: check a sensor, decode and display a frame of video to a screen, keep the wifi connection alive, etc.
 
 \end{frame}
@@ -125,6 +150,10 @@ If $U > 1$, it means the system is overloaded.
 \frametitle{Overload}
 If overloaded: there are too many periodic tasks and we cannot guarantee that the system can execute all tasks and meet the deadlines. 
 
+\begin{center}
+	\includegraphics[width=0.3\textwidth]{images/toomany.jpg}
+\end{center}
+
 Otherwise, we will be able to devise a schedule that makes it all work.
 
 \end{frame}
@@ -136,7 +165,7 @@ If the only tasks in the system are periodic ones, create a fixed schedule.
 
 This is what the university administrators do when they create the schedule of classes for a given term.
 
- Every Monday, for example, from 13:30-14:50, course ECE~254 (a ``process'', if you will) takes place in classroom EIT~1015 (a resource). 
+ Every Monday, for example, from 13:30-14:50, course SE~350 (a ``process'', if you will) takes place in classroom STC~0050 (a resource). 
  
 If there are more requests for room reservations than rooms and time slots available, it means some requests cannot be accommodated.
 
@@ -157,6 +186,10 @@ So we will need to deal with tasks that are not periodic, which we can categoriz
 \frametitle{Aperiodic Tasks}
 
 Aperiodic tasks are ones that respond to events that occur irregularly. 
+
+\begin{center}
+	\includegraphics[width=0.35\textwidth]{images/wildtask.jpg}
+\end{center}
 
 There is no minimum time interval between two events.
 
@@ -209,6 +242,15 @@ They are called optimal because they will ensure a schedule where all tasks meet
 
 The earliest deadline first algorithm is, presumably, very familiar to students. 
 
+\begin{center}
+	\includegraphics[width=0.5\textwidth]{images/deadlines.jpg}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Earliest Deadline First}
+
 Assignment due today, an assignment due next Tuesday, and an exam next month, then you may choose to schedule these things by their deadlines. 
 
 Do the assignment due today first. 
@@ -225,6 +267,11 @@ The principle is the same for the computer.
 
 Choose the task with the soonest deadline; if there is a tie, then random selection between the two will be sufficient (or other criteria may be used). 
 
+\end{frame}
+
+\begin{frame}
+\frametitle{Earliest Deadline First}
+
 If there exists some way to schedule all the tasks such that all deadlines are met, this algorithm will find it. 
 
 If a task is executing and another task arrives with a sooner deadline, the currently executing task should be suspended and the new task scheduled. 
@@ -238,6 +285,16 @@ This may mean a periodic task being preempted by an aperiodic/sporadic task.
 \frametitle{Least Slack First}
 
 A similar algorithm to earliest deadline first, is least slack first.
+
+\begin{center}
+	\includegraphics[width=\textwidth]{images/slack.png}
+\end{center}
+
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Least Slack First}
 
 \alert{Slack}: how long a task can wait before it must be scheduled to meet a deadline.
 
@@ -284,6 +341,11 @@ The traditional UNIX scheduling is really ancient; as in System V R3 and BSD 4.3
 \quad It was replaced in SVR4 (which had some real-time support).
 
 Multilevel feedback system using Round Robin within each of the queues. 
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Traditional UNIX}
 
 Time slicing is implemented and the default time slice is a (very long) 1 second. 
 
@@ -362,6 +424,10 @@ Yes, unfortunately, user processes get piled at the bottom of the list.
 It should provide for efficient use of I/O devices and tends to penalize processor-bound processes at the expense of I/O bound processes. 
 
 CPU-bound processes should be able to carry on executing when an I/O-bound process waits for the I/O operation to complete. 
+\end{frame}
+
+\begin{frame}
+\frametitle{Traditional UNIX}
 
 When an I/O operation is finished, we would like to start the next I/O operation so the I/O device is not waiting.
 
@@ -386,6 +452,12 @@ A thread runs until it is preempted, blocks, terminates, or its time slice expir
 If a higher priority thread is unblocked, it will preempt a lower priority thread. 
 
 Windows has 32 different priority levels, the regular (priority 1 to 15) and real-time classes (16 to 31). 
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Windows Scheduling}
+
 
 A memory management task runs at priority 0.
 
@@ -429,6 +501,11 @@ If a process reaches the end of a time slice, the thread is interrupted.
 
 Unless it is in the real-time category, its priority will be lowered, to a minimum of the base priority of each class. 
 
+\end{frame}
+
+\begin{frame}
+\frametitle{Windows Time Slicing}
+
 When a process that was blocked on something (e.g., a wait or I/O), its priority is temporarily boosted (unless it is real-time, in which case it cannot be boosted). 
 
 The amount of the boost depends on what the event was.
@@ -443,6 +520,11 @@ A process that was waiting for keyboard input gets a bigger boost than one that 
 The operating system also gives a priority to whatever process is running in the selected foreground window. 
 
 This is different from foreground vs. background processes, because the definition of a foreground process was one that was user-interactive. 
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Windows Priority: UI}
 
 Here, the distinction is which of the user-interactive processes is currently ``on top'' in the UI. 
 

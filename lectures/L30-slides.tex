@@ -19,6 +19,18 @@
 \begin{frame}
 \frametitle{Linux}
 
+\begin{center}
+	\includegraphics[width=0.4\textwidth]{images/tux.png}
+\end{center}
+
+
+ \end{frame}
+ 
+ 
+\begin{frame}
+\frametitle{Linux}
+
+
 Linux has two scheduling modes: Real-Time and Non-Real-Time (or perhaps we should call that the ``normal'' one). 
 
 It is not necessary to use the real-time scheduler, strictly speaking. 
@@ -40,6 +52,10 @@ There are three classes into which priorities can be assigned:
 	\item \texttt{SCHED\_OTHER}: Other (non-real-time) threads.
 \end{itemize}
 
+\end{frame}
+
+\begin{frame}
+\frametitle{Linux Real-Time Scheduler}
 
 In each class, threads may have different priorities relative to one another. 
 
@@ -52,19 +68,11 @@ Real-time priorities are in the range [0-99] and the other priorities are [100-1
 \begin{frame}
 \frametitle{Linux Real-Time Scheduler}
 
-The rules for \texttt{SCHED\_FIFO}:
+The FIFO scheduler has a lot of rules...
 
-\begin{enumerate}
-	\item The system will only interrupt a FIFO thread if one of the following is true:
-	\begin{enumerate}
-		\item Another FIFO thread of higher priority becomes ready.
-		\item The current FIFO thread gets blocked (e.g., on I/O).
-		\item The current FIFO thread yields the CPU with \texttt{sched\_yield}.
-	\end{enumerate}
-	\item If a FIFO thread is interrupted, it is placed in the queue associated with its priority.
-	\item If a FIFO thread becomes ready and that thread has higher priority than the currently-executing thread, the currently-executing thread is preempted in favour of the highest priority ready FIFO thread. If two or more threads are at the highest priority, the one that has been waiting the longest is chosen.
-\end{enumerate}
-
+\begin{center}
+	\includegraphics[width=0.4\textwidth]{images/therules.jpg}
+\end{center}
 
 \end{frame}
 
@@ -100,9 +108,19 @@ Then they introduced a scheduling algorithm that was commonly called the $O(1)$ 
 
 Big improvement over the previous scheduling algorithm ($O(n)$).
 
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Linux Non-Real-Time Schedulers}
+
 It also worked a lot better for SMP systems, because it introduced processor affinity and load balancing. 
 
 Since version 2.6.23 of the kernel, however, a new scheduling algorithm has replaced the $O(1)$ scheduler; it is called the \alert{Completely Fair Scheduler} (CFS).
+
+\begin{center}
+	\includegraphics[width=0.5\textwidth]{images/rankofmaster.jpg}
+\end{center}
 
 
 \end{frame}
@@ -115,6 +133,11 @@ The traditional UNIX scheduler fell down on a couple of fronts.
 It was not very good at handling very large numbers of processes.
 
 $O(n)$ algorithm, so its performance got worse as more processes appeared. 
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Problems with the Traditional Scheduler}
 
 It also had significant difficulty with SMP systems due to its design:
 
@@ -168,13 +191,13 @@ So now that we know the problem with the traditional scheduler, we can see how t
 
 The kernel would maintain two data structures for the processor in the system.
 
-\begin{verbatim}
+\begin{lstlisting}[language=C]
 struct prio_array {
   int nr_active; /* number of tasks in this array */
   unsigned long bitmap[BITMAP_SIZE]; /* priority bitmap */
   struct list_head queue[MAX_PRIO]; /* priority queues */
 }
-\end{verbatim}
+\end{lstlisting}
 
 There is one queue for each priority level; \texttt{MAX\_PRIO} (140) is both the highest priority and the number of queues. 
 
@@ -213,6 +236,11 @@ All scheduling takes place from the active queues.
 
 The highest priority queue is chosen; if there are multiple tasks in that queue, they are scheduled in Round-Robin fashion. 
 
+\end{frame}
+
+\begin{frame}
+\frametitle{The $O(1)$ Scheduler}
+
 This continues until the active queue structure is empty. 
 
 When that happens, the active and expired queues change places, and execution (scheduling) continues.
@@ -227,8 +255,6 @@ Part of the difficulty with the $O(1)$ scheduler is that it does not provide ver
 
 These are the ones you work with on your desktop computer. 
 
-Given that the Linux folks always claim that this year or next year is ``the year of the Linux desktop'' (... still waiting for that) a new scheduler was needed. 
-
 Hence, the relatively rapid replacement with the Completely Fair Scheduler.
 
 \end{frame}
@@ -241,6 +267,11 @@ The CFS, written by Ingo Moln\'ar, is not $O(1)$, unfortunately.
 It uses a red-black tree to model the ready queue, where processes are inserted based on a linear ordering of execution time. 
 
 The leftmost group in this tree is therefore the task that has spent the least amount of time executing and that is what will be scheduled next. 
+
+\end{frame}
+
+\begin{frame}
+\frametitle{The CFS}
 
 Because a red-black tree remains balanced, the time to access the leftmost group will be $O($ln$(n))$.
 
@@ -279,6 +310,11 @@ Rather than using a strict rule, the CFS scheduler assigns a proportion of CPU p
 A nice value may be in the range -20 to +19 (lower priority is still higher priority).
 
 The CFS does not use a particular length of time slice, but has a \alert{target latency}.
+
+\end{frame}
+
+\begin{frame}
+\frametitle{The CFS}
 
 This is an interval of time in which all ready tasks should get to run at least once. 
 
@@ -335,6 +371,12 @@ We may designate a number of processes as belonging to a group.
 
 This is useful when a process spawns lots of threads or lots of new processes. 
 
+
+\end{frame}
+
+\begin{frame}
+\frametitle{CFS: Group Scheduling}
+
 Instead of treating every thread or process totally equally, a multithreaded program's threads can all be pooled; the group is equal to other processes. 
 
 Within the group, the scheduler will try to treat the threads or processes fairly.
@@ -351,7 +393,21 @@ Within the group, the scheduler will try to treat the threads or processes fairl
 
 The authors found four significant bugs in Linux multicore scheduling such that there were threads waiting to run even when cores were sitting idle. 
 
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{A Decade of Wasted Cores}
+
 Performance degradation is in the range of 13-24\%, but may be as much as 138 times when looking at some corner cases. 
+
+\begin{center}
+	\includegraphics[width=\textwidth]{images/yikes.jpg}
+\end{center}
+
+
 
 \end{frame}
 
@@ -439,6 +495,13 @@ So what are the four bugs that caused this problem?
 Cores would steal work from other cores if the average load of the victim scheduling group is higher than the average load of the one doing the stealing. 
 
 But averages can be misleading! 
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{The Group Imbalance Bug}
 
 The fix is to use the minimum load of the group, meaning the load of the least loaded core of the group. 
 
