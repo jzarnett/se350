@@ -107,3 +107,5 @@ sympy-plots-for-*.tex/
 
 # xindy
 *.xdy
+
+.DS_Store
