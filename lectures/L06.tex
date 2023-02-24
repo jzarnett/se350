@@ -218,7 +218,7 @@ Right, so let's say that we want to send some data then:
 int msgsnd( int msqid, const void *ptr, size_t nbytes, int flag );
 \end{lstlisting}
 
-The first parameter is the queue we want to send it to; the second is the message; the third is the data that we want to send. The last parameter is for what happens if the queue is full: normally we just want to wait, so this would be a blocking send, and you can provide 0 as the argument. But if you would prefer, you can use \texttt{IPC\_NOWAIT}, in which case an attempt to add to the full queue will just return with an error instead of blocking.
+The first parameter is the queue we want to send it to; the second is the message; the third is the size of the data that we want to send. The last parameter is for what happens if the queue is full: normally we just want to wait, so this would be a blocking send, and you can provide 0 as the argument. But if you would prefer, you can use \texttt{IPC\_NOWAIT}, in which case an attempt to add to the full queue will just return with an error instead of blocking.
 
 And to receive:
 \begin{lstlisting}[language=C]
