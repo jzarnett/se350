@@ -100,7 +100,7 @@ To generalize this solution to allow multiple producers and multiple consumers, 
 
 This situation should be setting off some alarm bells in your mind. In the synchronization patterns examined earlier, we mentioned the possibility of deadlock: all threads getting stuck. The hint that we might have a problem is one \texttt{wait} statement inside another. Unfortunately, seeing this pattern is not necessarily a guarantee that deadlock is going to happen (that would be too easy). This is, however, a sign that we need to analyze the code to determine if there is a problem.
 
-Reading through the psuedocode above, you should be able to reason that this solution will not get stuck. You may choose a strategy along the lines of ``proof by contradiction'' and try to come up with a scenario that leads to deadlock. If you are unable to find one, then you may have a suitable solution (though it might be best to have someone else check to be sure). This is not a substitute for a formal mathematical proof, but the logic in your analysis should be convincing. Consider an alternate solution:
+Reading through the pseudocode above, you should be able to reason that this solution will not get stuck. You may choose a strategy along the lines of ``proof by contradiction'' and try to come up with a scenario that leads to deadlock. If you are unable to find one, then you may have a suitable solution (though it might be best to have someone else check to be sure). This is not a substitute for a formal mathematical proof, but the logic in your analysis should be convincing. Consider an alternate solution:
 
 \begin{multicols}{2}
 	\textbf{Producer}\vspace{-2em}
@@ -129,7 +129,7 @@ This solution is very much like the one we are certain works, except we have swa
 
 If the above pseudocode were implemented it is not a certainty that there will be a deadlock every time. In fact, the code will probably work fine most of the time. Once, however, we have found one scenario that can lead to deadlock, there is no need to look for other failure cases; we can write off this solution and replace it with a better one.
 
-But let's get to doing an actual example! We will take some time to analyze this solution and understand how we got from the psuedocode above to the actual code below.
+But let's get to doing an actual example! We will take some time to analyze this solution and understand how we got from the pseudocode above to the actual code below.
 
 \subsection*{Producer-Consumer Example}
 

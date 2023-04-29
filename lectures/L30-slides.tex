@@ -534,7 +534,7 @@ If load balancing is running on core 31 it might not steal from a neighbour.\\
 
 We have already discussed the idea of processor affinity, but sometimes, too much of a good thing is a problem. 
 
-If a thread goes to sleep on group 1, when it and it gets unblocked later by some other thread, the scheduler will try to put it on one of the cores in group 1... 
+If a thread goes to sleep on group 1, when it gets unblocked later by some other thread, the scheduler will try to put it on one of the cores in group 1... 
 
 Even if other groups are not busy! 
 
