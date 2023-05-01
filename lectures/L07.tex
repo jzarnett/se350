@@ -30,7 +30,7 @@ The \texttt{type} argument gives what kind of information we are going to be sen
 
 The \texttt{protocol} argument is about how the data is to be transported over the connection, and we will just use 0 for the default. If we chose a stream, the default is TCP/IP. Without going into too much detail, TCP/IP is the way a lot of data is transported over the internet. This is a (generally) reliable method of transport that makes sure your data gets to where it needs to go, with all the pieces in the correct order. If we chose a datagram, the default is UDP, which is not a reliable method of communication: data packets might get there or they might not.
 
-Notice that the return type is an integer. Why is that? Well, a file descriptor is really just an integer, as we already saw with the pipe examples. So as long as we remember that's what the integer represents, we will not have any problems.
+Notice that the return type is an integer. Why is that? Well, a file descriptor is really just an integer. So as long as we remember that's what the integer represents, we will not have any problems.
 
 And just like a file that is opened, a socket that is opened needs to be closed when we are finished with it. For that we can just use \texttt{close}. You have probably noticed some asymmetry: there are different calls to open things (\texttt{open}, \texttt{pipe}, \texttt{socket}). That's because when we want to open something we have to say what kind of thing we want to open. When we want to close something, we already know what type it is.
 
@@ -171,7 +171,7 @@ bind( socketfd, (struct sockaddr*) &addr, sizeof( addr ));
 
 With that done, we've acquired the resource of port 2520 for our use. We haven't done anything with it yet, but we've taken it for ourselves. You'll notice also this did not happen on the client side. This is because we don't care (usually) on the client side what the outgoing port number is. So we can just skip that step, unless we have a reason to care what the outgoing port is.
 
-Step two is \texttt{listen()}: int this step we wait for incoming connections. This is the simplest step and you just call:
+Step two is \texttt{listen()}: in this step we wait for incoming connections. This is the simplest step and you just call:
 
 \begin{lstlisting}[language=C]
 int listen(int sockfd, int backlog); 

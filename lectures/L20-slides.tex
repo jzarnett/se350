@@ -386,7 +386,7 @@ Given the number of phones in the countries, 7 digits can't possibly be enough.
 
 This is the idea we want to apply: let each process have its own area code. 
 
-So process can write to location 1024 and process 2 can write to location 1024 and these are two distinct locations, perhaps 21024 and 91024 respectively.
+So process 1 can write to location 1024 and process 2 can write to location 1024 and these are two distinct locations, perhaps 21024 and 91024 respectively.
 
 Now, instead of altering the addresses in memory, we will effectively prefix every memory access with an area code.
 
